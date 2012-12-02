@@ -2,6 +2,8 @@
 #define F_CPU 1000000UL  // 1 MHz
 #include <util/delay.h>
 
+#include "pitches.h"
+
 #define BUZZER 6 //PORTD
 
 #define TS_A 3   //PORTD
@@ -16,6 +18,7 @@
 #define LED_4 3  //PORTC
 
 #define TOUCH_SENSE_THRESHOLD 4
+#define TOUCH_SENSE_CHARGE_TIME 1.0
 
 /***** SOUND *****/
 
@@ -27,7 +30,15 @@ void beep(){
     int i;
     for (i = 0; i < 100; i++){
         PORTD ^= _BV(BUZZER);
-        _delay_ms(1);
+        _delay_ms(0.5);
+    }
+    _delay_ms(100);
+}
+void beep_low(){
+    int i;
+    for (i = 0; i < 100; i++){
+        PORTD ^= _BV(BUZZER);
+        _delay_ms(3);
     }
     _delay_ms(100);
 }
@@ -40,88 +51,75 @@ void setup_touch(){
     MCUCR |= _BV(PUD);
 }
 
-static inline uint8_t touch_sense_raw(volatile uint8_t* ddreg, 
-                                      volatile uint8_t* portreg, 
-                                      volatile uint8_t* pinreg, 
-                                      uint8_t pin){
-    uint8_t i = 0;
-    //charge pin
-    *ddreg |= _BV(pin);  //output
-    *portreg |= _BV(pin); //high
-    _delay_ms( 1 );  //charge time
-    //read pin
-    *ddreg &= ~_BV(pin);
-    while(*pinreg & _BV(pin)){
-        i++;
-    }
-    return i;
-}
 uint8_t touch_sense_a_raw(){
-    return touch_sense_raw(&DDRD, &PORTD, &PIND, TS_A);
-    /*uint8_t i = 0;
-    //charge pin
-    DDRD |= _BV(TS_A);  //output
-    PORTD |= _BV(TS_A); //high
-    _delay_ms( 1 );  //charge time
-    //read pin
-    DDRD &= ~_BV(TS_A);
-    while(PIND & _BV(TS_A)){
-        i++;
-    }
-    return i;*/
+    //return touch_sense_raw(&DDRD, &PORTD, &PIND, TS_A);
+     uint8_t i = 0;
+     //charge pin
+     DDRD |= _BV(TS_A);  //output
+     PORTD |= _BV(TS_A); //high
+     _delay_ms( TOUCH_SENSE_CHARGE_TIME );  //charge time
+     //read pin
+     DDRD &= ~_BV(TS_A);
+     while(PIND & _BV(TS_A)){
+         i++;
+     }
+     return i;
 }
 uint8_t touch_sense_b_raw(){
-    return touch_sense_raw(&DDRD, &PORTD, &PIND, TS_B);
-    /*uint8_t i = 0;
-    //charge pin
-    DDRD |= _BV(TS_B);  //output
-    PORTD |= _BV(TS_B); //high
-    _delay_ms( 1 );  //charge time
-    //read pin
-    DDRD &= ~_BV(TS_B);
-    while(PIND & _BV(TS_B)){
-        i++;
-    }
-    return i;*/
+    //return touch_sense_raw(&DDRD, &PORTD, &PIND, TS_A);
+     uint8_t i = 0;
+     //charge pin
+     DDRD |= _BV(TS_B);  //output
+     PORTD |= _BV(TS_B); //high
+     _delay_ms( TOUCH_SENSE_CHARGE_TIME );  //charge time
+     //read pin
+     DDRD &= ~_BV(TS_B);
+     while(PIND & _BV(TS_B)){
+         i++;
+     }
+     return i;
 }
 uint8_t touch_sense_c_raw(){
-    uint8_t i = 0;
-    //charge pin
-    DDRD |= _BV(TS_C);  //output
-    PORTD |= _BV(TS_C); //high
-    _delay_ms( 1 );  //charge time
-    //read pin
-    DDRD &= ~_BV(TS_C);
-    while(PIND & _BV(TS_C)){
-        i++;
-    }
-    return i;
+    //return touch_sense_raw(&DDRD, &PORTD, &PIND, TS_A);
+     uint8_t i = 0;
+     //charge pin
+     DDRD |= _BV(TS_C);  //output
+     PORTD |= _BV(TS_C); //high
+     _delay_ms( TOUCH_SENSE_CHARGE_TIME );  //charge time
+     //read pin
+     DDRD &= ~_BV(TS_C);
+     while(PIND & _BV(TS_C)){
+         i++;
+     }
+     return i;
 }
 uint8_t touch_sense_d_raw(){
-    uint8_t i = 0;
-    //charge pin
-    DDRC |= _BV(TS_D);  //output
-    PORTC |= _BV(TS_D); //high
-    _delay_ms( 1 );  //charge time
-    //read pin
-    DDRC &= ~_BV(TS_D);
-    while(PINC & _BV(TS_D)){
-        i++;
-    }
-    return i;
+    //return touch_sense_raw(&DDRD, &PORTD, &PIND, TS_A);
+     uint8_t i = 0;
+     //charge pin
+     DDRC |= _BV(TS_D);  //output
+     PORTC |= _BV(TS_D); //high
+     _delay_ms( TOUCH_SENSE_CHARGE_TIME );  //charge time
+     //read pin
+     DDRC &= ~_BV(TS_D);
+     while(PINC & _BV(TS_D)){
+         i++;
+     }
+     return i;
 }
 uint8_t touch_sense_e_raw(){
-    uint8_t i = 0;
-    //charge pin
-    DDRC |= _BV(TS_E);  //output
-    PORTC |= _BV(TS_E); //high
-    _delay_ms( 1 );  //charge time
-    //read pin
-    DDRC &= ~_BV(TS_E);
-    while(PINC & _BV(TS_E)){
-        i++;
-    }
-    return i;
+    //return touch_sense_raw(&DDRD, &PORTD, &PIND, TS_A);
+     uint8_t i = 0;
+     //charge pin
+     DDRC |= _BV(TS_E);  //output
+     PORTC |= _BV(TS_E); //high
+     _delay_ms( TOUCH_SENSE_CHARGE_TIME );  //charge time
+     //read pin
+     DDRC &= ~_BV(TS_E);
+     while(PINC & _BV(TS_E)){
+         i++;
+     }
+     return i;
 }
 
 uint8_t touch_sense_a(){
@@ -150,17 +148,29 @@ void setup_leds(){
 void toggle_led_1(){
     PORTB ^= _BV(LED_1);
 }
-
 void toggle_led_2(){
     PORTB ^= _BV(LED_2);
 }
-
 void toggle_led_3(){
     PORTB ^= _BV(LED_3);
 }
-
 void toggle_led_4(){
     PORTC ^= _BV(LED_4);
+}
+
+/***** NYAN CAT *****/
+#include "nyan.c"
+void nyan(){
+    TCCR0A |= _BV(COM0A0) | _BV(WGM01) | _BV(WGM00);
+    TCCR0B |= _BV(WGM02) | _BV(CS01);
+    OCR0A = 255;
+    setup();
+    loop();
+}
+void nyan_reset(){
+    TCCR0A = 0;
+    TCCR0B = 0;
+    OCR0A = 0;
 }
 
 /***** MAIN *****/
@@ -179,6 +189,7 @@ int main() {
         if (a){
             toggle_led_1();
             beep();
+            //nyan();
         }
         if (b){
             toggle_led_2();
@@ -197,7 +208,8 @@ int main() {
             toggle_led_2();
             toggle_led_3();
             toggle_led_4();
-            beep();
+            beep_low();
+            //nyan_reset();
         }
     }
     return 0;

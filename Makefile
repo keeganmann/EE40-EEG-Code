@@ -7,7 +7,7 @@ OBJECTS    = main.o
 
 FUSES      = ""
 
-PROGRAMMER_FLAGS =  -c usbtiny -p $(DEVICE)
+PROGRAMMER_FLAGS =  -c usbtiny -p $(DEVICE) -B 3
 
 ############### END OF CONFIGURATION SETTINGS ##############
 
