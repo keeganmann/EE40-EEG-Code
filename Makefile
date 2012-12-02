@@ -3,7 +3,7 @@
 DEVICE     = atmega328p
 
 #CLOCK      = 1000000  #comment out if defined in source
-OBJECTS    = main.o
+OBJECTS    = main.o nyan.o
 
 FUSES      = ""
 

@@ -2,8 +2,6 @@
 #define F_CPU 1000000UL  // 1 MHz
 #include <util/delay.h>
 
-#include "pitches.h"
-
 #define BUZZER 6 //PORTD
 
 #define TS_A 3   //PORTD
@@ -159,7 +157,10 @@ void toggle_led_4(){
 }
 
 /***** NYAN CAT *****/
-#include "nyan.c"
+
+extern void setup();
+extern void loop();
+
 void nyan(){
     TCCR0A |= _BV(COM0A0) | _BV(WGM01) | _BV(WGM00);
     TCCR0B |= _BV(WGM02) | _BV(CS01);
@@ -190,6 +191,7 @@ int main() {
             toggle_led_1();
             beep();
             //nyan();
+            //nyan_reset();
         }
         if (b){
             toggle_led_2();
@@ -209,7 +211,6 @@ int main() {
             toggle_led_3();
             toggle_led_4();
             beep_low();
-            //nyan_reset();
         }
     }
     return 0;
