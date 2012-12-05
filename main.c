@@ -4,6 +4,7 @@
 #include <avr/pgmspace.h>
 
 #include "lcd_ascii.h"
+#include "nyan.h"
 
 #define BUZZER 6 //PORTD
 
@@ -184,9 +185,6 @@ void toggle_led_4(){
 }
 
 /***** NYAN CAT *****/
-
-extern void setup();
-extern void loop();
 
 void nyan(){
     TCCR0A |= _BV(COM0A0) | _BV(WGM01) | _BV(WGM00);
